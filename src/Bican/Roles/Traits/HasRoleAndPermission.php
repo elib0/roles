@@ -29,7 +29,7 @@ trait HasRoleAndPermission
      */
     public function roles()
     {
-        return $this->belongsToMany(config('roles.models.role'), config('role.belongs_tables.role_user'))->withTimestamps();
+        return $this->belongsToMany(config('roles.models.role'), config('roles.belongs_tables.role_user'))->withTimestamps();
     }
 
     /**
@@ -159,7 +159,7 @@ trait HasRoleAndPermission
     public function rolePermissions()
     {
         $permissionModel = app(config('roles.models.permission'));
-        $permission_role_table = config('role.belongs_tables.permission_role');
+        $permission_role_table = config('roles.belongs_tables.permission_role');
 
         if (!$permissionModel instanceof Model) {
             throw new InvalidArgumentException('[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model');
