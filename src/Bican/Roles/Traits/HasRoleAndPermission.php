@@ -29,7 +29,7 @@ trait HasRoleAndPermission
      */
     public function roles()
     {
-        return $this->belongsToMany(config('roles.models.role'), config('role.belongs_tables.user_role'))->withTimestamps();
+        return $this->belongsToMany(config('roles.models.role'), config('role.belongs_tables.role_user'))->withTimestamps();
     }
 
     /**

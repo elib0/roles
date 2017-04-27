@@ -45,7 +45,7 @@ return [
     ],
 
     'belongs_tables' => [
-        'user_role' => 'user_role',
+        'role_user' => 'role_user',
         'permission_role' => 'permission_role',
     ],
 
