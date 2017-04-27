@@ -29,7 +29,7 @@ trait HasRoleAndPermission
      */
     public function roles()
     {
-        return $this->belongsToMany(config('roles.models.role'))->withTimestamps();
+        return $this->belongsToMany(config('roles.models.role'), config('role.belongs_tables.user_role'))->withTimestamps();
     }
 
     /**
@@ -159,13 +159,14 @@ trait HasRoleAndPermission
     public function rolePermissions()
     {
         $permissionModel = app(config('roles.models.permission'));
+        $permission_role_table = config('role.belongs_tables.permission_role');
 
         if (!$permissionModel instanceof Model) {
             throw new InvalidArgumentException('[roles.models.permission] must be an instance of \Illuminate\Database\Eloquent\Model');
         }
 
-        return $permissionModel::select(['permissions.*', 'permission_role.created_at as pivot_created_at', 'permission_role.updated_at as pivot_updated_at'])
-                ->join('permission_role', 'permission_role.permission_id', '=', 'permissions.id')->join('roles', 'roles.id', '=', 'permission_role.role_id')
+        return $permissionModel::select(['permissions.*', $permission_role_table.'.created_at as pivot_created_at', $permission_role_table.'.updated_at as pivot_updated_at'])
+                ->join($permission_role_table, $permission_role_table.'.permission_id', '=', 'permissions.id')->join('roles', 'roles.id', '=', $permission_role_table.'.role_id')
                 ->whereIn('roles.id', $this->getRoles()->pluck('id')->all()) ->orWhere('roles.level', '<', $this->level())
                 ->groupBy(['permissions.id','permissions.name', 'permissions.slug', 'permissions.description', 'permissions.model', 'permissions.created_at', 'permissions.updated_at', 'pivot_created_at', 'pivot_updated_at']);
     }
@@ -327,7 +328,7 @@ trait HasRoleAndPermission
     public function detachAllPermissions()
     {
         $this->permissions = null;
-        
+
         return $this->userPermissions()->detach();
     }
 

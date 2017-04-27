@@ -44,6 +44,11 @@ return [
         'permission' => Bican\Roles\Models\Permission::class,
     ],
 
+    'belongs_tables' => [
+        'user_role' => 'user_role',
+        'permission_role' => 'permission_role',
+    ]
+
     /*
     |--------------------------------------------------------------------------
     | Roles, Permissions and Allowed "Pretend"
